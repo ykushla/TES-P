@@ -35,27 +35,25 @@ class Scheme:
 
             # fills in auxiliary dictionaries
 
-            if self.segment_list_by_start_point.__contains__(start_point):
-                local_segment_list = self.segment_list_by_start_point[start_point]
-            else:
+            local_segment_list = self.segment_list_by_start_point.get(start_point)
+            if local_segment_list is None:
                 local_segment_list = []
                 self.segment_list_by_start_point[start_point] = local_segment_list
             local_segment_list.append(segment)
 
-            if self.segment_list_by_end_point.__contains__(end_point):
-                local_segment_list = self.segment_list_by_end_point[end_point]
-            else:
+            local_segment_list = self.segment_list_by_end_point.get(end_point)
+            if local_segment_list is None:
                 local_segment_list = []
                 self.segment_list_by_end_point[end_point] = local_segment_list
             local_segment_list.append(segment)
 
         # links segments between each other, check on the directions definitions
         for segment in self.segment_list:  # type: Segment
-            if not self.segment_list_by_start_point.__contains__(segment.end_point):
+            local_segment_list = self.segment_list_by_start_point.get(segment.end_point)
+            if local_segment_list is None:
                 segment.set_terminal()
                 self.terminal_segment_list.append(segment)
             else:
-                local_segment_list = self.segment_list_by_start_point[segment.end_point]
                 for segment2 in local_segment_list:  # type: Segment
                     # check if all segments on crossings have a defined direction
                     if len(local_segment_list) > 1 and (not segment2.direction):

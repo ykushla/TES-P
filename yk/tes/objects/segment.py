@@ -8,7 +8,7 @@ class Segment:
         self.start_point = start_point
         self.end_point = end_point
         self.direction = direction
-        self.velocity = velocity;
+        self.velocity = velocity
 
         self.length = get_distance_between_points(start_point, end_point)
 
