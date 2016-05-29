@@ -5,8 +5,12 @@ from yk.tes.objects.segment import Segment
 
 
 class Scheme:
+    # transportation scheme class
 
     def __init__(self, frame):  # type: Frame
+        # default and main constructor
+
+        # create the internal lists
         self.segment_list = []
         self.initial_segments = {}
         self.terminal_segment_list = []
@@ -14,7 +18,7 @@ class Scheme:
         self.segment_list_by_end_point = {}
         self.directions = set()
 
-        # builds the scheme object from the frame dataset
+        # build the scheme object from the Frame
         for item in frame.items:
             name = item["Name"]
             x1 = item["X1"]
@@ -24,10 +28,11 @@ class Scheme:
             velocity = item["Velocity"]  # type: str
             direction = item["Direction"]  # type: str
 
-            # adds the direction subset to the general direction set
+            # add the direction subset to the general direction set
             if direction:
                 self.directions = self.directions | set(direction.split(","))
 
+            # creation and adding of a new segment
             start_point = Point(x1, y1)
             end_point = Point(x2, y2)
             segment = Segment(name, start_point, end_point, direction, velocity)
@@ -47,14 +52,17 @@ class Scheme:
                 self.segment_list_by_end_point[end_point] = local_segment_list
             local_segment_list.append(segment)
 
-        # links segments between each other, check on the directions definitions
+        # links segments between each other, adding to the terminal and initial lists
+        # check on the directions definitions
         for segment in self.segment_list:  # type: Segment
+
             local_segment_list = self.segment_list_by_start_point.get(segment.end_point)
             if local_segment_list is None:
                 segment.set_terminal()
                 self.terminal_segment_list.append(segment)
             else:
                 for segment2 in local_segment_list:  # type: Segment
+
                     # check if all segments on crossings have a defined direction
                     if len(local_segment_list) > 1 and (not segment2.direction):
                         raise Exception("""Segment (name: \"%s\"; points: %f, %f, %f, %f) must have a direction
@@ -74,6 +82,8 @@ class Scheme:
                 self.initial_segments[segment.name] = segment
 
     def get_boundary_points(self):
+        # returns the boundary points which represent the rectangle in which the entire scheme cna be placed
+
         minx, maxx, miny, maxy = 0, 0, 0, 0
 
         for segment in self.segment_list:  # type: Segment

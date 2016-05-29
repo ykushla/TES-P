@@ -2,6 +2,7 @@ from yk.tes.objects.point import get_distance_between_points
 
 
 class Segment:
+    # transportation system segment class
 
     def __init__(self, name, start_point, end_point, direction, velocity):
         self.name = name

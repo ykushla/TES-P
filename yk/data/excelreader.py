@@ -5,6 +5,8 @@ from yk.data.frame import Frame
 
 
 def read_from_file(file_name, sheet_name_list):
+    # reads the data from an Excel file into the list of Frames
+    # sheet_name_list takes a list of names of worksheets from the file to import
 
     wb = openpyxl.load_workbook(file_name)
 
@@ -39,13 +41,8 @@ def read_from_file(file_name, sheet_name_list):
 
 
 def read_signle_frame_from_file(file_name, sheet_name):
+    # reads a single Frame from an Excel file
+
     sheet_name_list = [sheet_name]
     frame_list = read_from_file(file_name, sheet_name_list)
     return frame_list[sheet_name]
-
-
-# test
-
-# file_name = r"c:\personal\projects\tes-p\test.xlsx"
-# frame = read_signle_frame_from_file(file_name, "data") # type: Frame
-# frame.print_to_console()
